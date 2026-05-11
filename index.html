@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Historia de Amor - Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      background: #1f2937;
+      overflow-x: hidden;
+    }
+
+    .top-whatsapp {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 50;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      color: #fff;
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 600;
+      letter-spacing: .5px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.28);
+      box-shadow: 0 12px 35px rgba(0,0,0,.22);
+      transition: all .3s ease;
+    }
+
+    .top-whatsapp:hover {
+      background: rgba(255,255,255,.24);
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(20, 24, 38, 0.55), rgba(20, 24, 38, 0.7)),
+        url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .hero-content {
+      max-width: 850px;
+      animation: fadeUp 1.5s ease forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 1;
+      margin-bottom: 25px;
+      text-shadow: 0 10px 35px rgba(0,0,0,.45);
+    }
+
+    .hero p {
+      font-size: clamp(1.1rem, 3vw, 1.7rem);
+      line-height: 1.7;
+      color: rgba(255,255,255,.92);
+    }
+
+    .scroll-note {
+      margin-top: 35px;
+      font-size: .95rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: .85;
+    }
+
+    .section-bg {
+      background:
+        linear-gradient(rgba(31, 41, 55, 0.88), rgba(17, 24, 39, 0.95)),
+        url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2070&auto=format&fit=crop');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+    }
+
+    .story {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 50px;
+      padding: 90px 8%;
+    }
+
+    .story.reverse .photo {
+      order: 2;
+    }
+
+    .story.reverse .message {
+      order: 1;
+    }
+
+    .photo img {
+      width: 100%;
+      height: min(70vh, 620px);
+      object-fit: cover;
+      border-radius: 32px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.35);
+      transform: scale(.98);
+      transition: transform .8s ease, filter .8s ease;
+      filter: contrast(1.08) saturate(1.12) brightness(1.02);
+    }
+
+    .photo img:hover {
+      transform: scale(1.02);
+    }
+
+    .message {
+      padding: 40px;
+      border-radius: 32px;
+      background: rgba(255, 255, 255, .12);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.2);
+      box-shadow: 0 20px 70px rgba(0,0,0,.25);
+    }
+
+    .message span {
+      display: inline-block;
+      font-size: .9rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      color: #fde68a;
+      font-weight: 600;
+    }
+
+    .message h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 4.5rem);
+      line-height: 1.05;
+      margin-bottom: 22px;
+    }
+
+    .message p {
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      line-height: 1.8;
+      color: rgba(255,255,255,.9);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(55px);
+      transition: all 1s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contact-section {
+      min-height: 70vh;
+      background:
+        linear-gradient(rgba(17, 24, 39, .82), rgba(17, 24, 39, .9)),
+        url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 70px 25px;
+    }
+
+    .contact-card {
+      max-width: 850px;
+      padding: 50px 35px;
+      border-radius: 35px;
+      background: rgba(255,255,255,.14);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.25);
+      box-shadow: 0 30px 80px rgba(0,0,0,.32);
+    }
+
+    .contact-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      margin-bottom: 22px;
+    }
+
+    .contact-card p {
+      font-size: clamp(1.1rem, 3vw, 1.55rem);
+      line-height: 1.7;
+      margin-bottom: 30px;
+      color: rgba(255,255,255,.92);
+    }
+
+    .whatsapp-button {
+      display: inline-block;
+      padding: 16px 30px;
+      border-radius: 999px;
+      background: #25D366;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,.28);
+      transition: all .3s ease;
+    }
+
+    .whatsapp-button:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 20px 45px rgba(0,0,0,.35);
+    }
+
+    .final {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.65)),
+        url('https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?q=80&w=2070&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 35px;
+    }
+
+    .final-box {
+      max-width: 850px;
+      padding: 45px;
+      border-radius: 35px;
+      background: rgba(255,255,255,.13);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.25);
+    }
+
+    .final h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      margin-bottom: 25px;
+    }
+
+    .final p {
+      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      line-height: 1.7;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(35px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 850px) {
+      .story,
+      .story.reverse {
+        grid-template-columns: 1fr;
+        padding: 70px 22px;
+        gap: 28px;
+      }
+
+      .story.reverse .photo,
+      .story.reverse .message {
+        order: unset;
+      }
+
+      .photo img {
+        height: 430px;
+      }
+
+      .message {
+        padding: 28px;
+      }
+
+      .section-bg {
+        background-attachment: scroll;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="top-whatsapp" href="https://wa.me/573505267000" target="_blank" rel="noopener">WhatsApp</a>
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Nuestra Historia</h1>
+      <p>Una página emocional, elegante y personalizada para transformar recuerdos en una experiencia digital inolvidable.</p>
+      <div class="scroll-note">Desliza para descubrir</div>
+    </div>
+  </section>
+
+  <main class="section-bg">
+    <section class="story reveal">
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1974&auto=format&fit=crop" alt="Pareja caminando">
+      </div>
+      <div class="message">
+        <span>Capítulo 01</span>
+        <h2>El día que todo empezó</h2>
+        <p>Dicen que las mejores historias nacen sin avisar. Una mirada, una sonrisa y una conversación sencilla fueron suficientes para comenzar un camino que ninguno de los dos imaginaba.</p>
+      </div>
+    </section>
+
+    <section class="story reveal reverse">
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop" alt="Celebración romántica">
+      </div>
+      <div class="message">
+        <span>Capítulo 02</span>
+        <h2>Los pequeños momentos</h2>
+        <p>No fueron los regalos ni los lugares perfectos. Fueron las risas espontáneas, los mensajes de madrugada y esos planes simples que terminaron siendo recuerdos eternos.</p>
+      </div>
+    </section>
+
+    <section class="story reveal">
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2070&auto=format&fit=crop" alt="Viaje juntos">
+      </div>
+      <div class="message">
+        <span>Capítulo 03</span>
+        <h2>Aprendimos a soñar</h2>
+        <p>Con cada paso, comenzaron a construir una vida llena de metas, viajes y promesas. No siempre fue fácil, pero siempre encontraron una razón para seguir juntos.</p>
+      </div>
+    </section>
+
+    <section class="story reveal reverse">
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1529636798458-92182e662485?q=80&w=1974&auto=format&fit=crop" alt="Familia feliz">
+      </div>
+      <div class="message">
+        <span>Capítulo 04</span>
+        <h2>La familia creció</h2>
+        <p>El amor se convirtió en hogar. Llegaron nuevas sonrisas, nuevas responsabilidades y una felicidad diferente: esa que se siente cuando la familia se vuelve el centro de todo.</p>
+      </div>
+    </section>
+
+    <section class="story reveal">
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop" alt="Playa">
+      </div>
+      <div class="message">
+        <span>Capítulo 05</span>
+        <h2>Nuevas aventuras</h2>
+        <p>Hoy siguen creando recuerdos, viajando, soñando y celebrando cada etapa. Porque lo más bonito no es llegar al destino, sino hacerlo de la mano de quienes amas.</p>
+      </div>
+    </section>
+  </main>
+
+  <section class="final">
+    <div class="final-box reveal">
+      <h2>Un regalo que se siente</h2>
+      <p>Ideal para aniversarios, cumpleaños, Día de la Madre, bodas, pedidas de mano o cualquier ocasión especial. Una historia hecha página web.</p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="contact-card reveal">
+      <h2>¿Quieres una página así?</h2>
+      <p>Si deseas un sitio así para contar tu historia o dar un detalle, escríbenos por WhatsApp al <strong>350 526 7000</strong>.</p>
+      <a class="whatsapp-button" href="https://wa.me/573505267000" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+    </div>
+  </section>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+
+    function revealOnScroll() {
+      reveals.forEach((element) => {
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+        const visiblePoint = 120;
+
+        if (elementTop < windowHeight - visiblePoint) {
+          element.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+  </script>
+</body>
+</html>
